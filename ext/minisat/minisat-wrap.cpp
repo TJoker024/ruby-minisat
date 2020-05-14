@@ -92,3 +92,19 @@ extern "C" int wrap_solver_var_size(wrap_solver slv) {
 extern "C" int wrap_solver_clause_size(wrap_solver slv) {
     return ((Solver*) slv)->nClauses();
 }
+
+extern "C" void* wrap_solver_trail(wrap_solver slv) {
+    return ((Solver*) slv)->trail();
+}
+
+extern "C" int* wrap_solver_trail_lim(wrap_solver slv) {
+    return ((Solver*) slv)->trail_lim();
+}
+
+extern "C" void* wrap_solver_vardata(wrap_solver slv) {
+    return ((Solver*) slv)->vardata();
+}
+
+extern "C" int wrap_solver_qhead(wrap_solver slv) {
+    return ((Solver*) slv)->qhead();
+}

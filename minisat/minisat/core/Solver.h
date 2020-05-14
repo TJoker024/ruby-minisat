@@ -326,6 +326,10 @@ inline int      Solver::nAssigns      ()      const   { return trail.size(); }
 inline int      Solver::nClauses      ()      const   { return clauses.size(); }
 inline int      Solver::nLearnts      ()      const   { return learnts.size(); }
 inline int      Solver::nVars         ()      const   { return vardata.size(); }
+inline void*    Solver::trail         ()      const   { return trail; }
+inline int*     Solver::trail_lim     ()      const   { return trail_lim; }
+inline void*    Solver::vardata       ()      const   { return vardata; }
+inline int      Solver::qhead         ()      const   { return qhead; }
 inline int      Solver::nFreeVars     ()      const   { return (int)dec_vars - (trail_lim.size() == 0 ? trail.size() : trail_lim[0]); }
 inline void     Solver::setPolarity   (Var v, bool b) { polarity[v] = b; }
 inline void     Solver::setDecisionVar(Var v, bool b) 

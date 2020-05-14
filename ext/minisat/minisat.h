@@ -47,6 +47,11 @@ extern int wrap_solver_solve(wrap_solver slv, int *lits, int len);
 extern int wrap_solver_simplify(wrap_solver slv);
 extern int wrap_solver_var_size(wrap_solver slv);
 extern int wrap_solver_clause_size(wrap_solver slv);
+extern void* wrap_solver_trail(wrap_solver slv);
+extern int* wrap_solver_trail_lim(wrap_solver slv);
+extern void* wrap_solver_vardata(wrap_solver slv);
+extern int wrap_solver_qhead(wrap_solver slv);
+
 
 #ifdef __cplusplus
 }
