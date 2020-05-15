@@ -33,6 +33,11 @@ THE SOFTWARE.
 extern "C" {
 #endif
 
+typedef struct intArray {
+    int len;
+    int* array;
+} intArray;
+
 typedef void* wrap_solver;
 
 extern int wrap_lit_pos_var(int v);
@@ -48,7 +53,7 @@ extern int wrap_solver_simplify(wrap_solver slv);
 extern int wrap_solver_var_size(wrap_solver slv);
 extern int wrap_solver_clause_size(wrap_solver slv);
 extern void* wrap_solver_trail(wrap_solver slv);
-extern int* wrap_solver_trail_lim(wrap_solver slv);
+extern intArray wrap_solver_trail_lim(wrap_solver slv);
 extern void* wrap_solver_vardata(wrap_solver slv);
 extern int wrap_solver_qhead(wrap_solver slv);
 

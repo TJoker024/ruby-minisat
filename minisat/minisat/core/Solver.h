@@ -91,6 +91,7 @@ public:
     int     nVars      ()      const;       // The current number of variables.
     int     nFreeVars  ()      const;
 
+
     // Resource contraints:
     //
     void    setConfBudget(int64_t x);
@@ -138,11 +139,21 @@ public:
     uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;
     uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;
 
+    // Helper structures:
+    //
+    struct VarData { CRef reason; int level; };
+
+
+    vec<Lit>            trail;            // Assignment stack; stores all assigments made in the order they were made.
+    vec<int>            trail_lim;        // Separator indices for different decision levels in 'trail'.
+    vec<VarData>        vardata;          // Stores reason and level for each variable.
+    int                 qhead;            // Head of queue (as index into the trail -- no more explicit propagation queue in MiniSat).
+
+
 protected:
 
     // Helper structures:
     //
-    struct VarData { CRef reason; int level; };
     static inline VarData mkVarData(CRef cr, int l){ VarData d = {cr, l}; return d; }
 
     struct Watcher {
@@ -179,10 +190,6 @@ protected:
     vec<lbool>          assigns;          // The current assignments.
     vec<char>           polarity;         // The preferred polarity of each variable.
     vec<char>           decision;         // Declares if a variable is eligible for selection in the decision heuristic.
-    vec<Lit>            trail;            // Assignment stack; stores all assigments made in the order they were made.
-    vec<int>            trail_lim;        // Separator indices for different decision levels in 'trail'.
-    vec<VarData>        vardata;          // Stores reason and level for each variable.
-    int                 qhead;            // Head of queue (as index into the trail -- no more explicit propagation queue in MiniSat).
     int                 simpDB_assigns;   // Number of top-level assignments since last execution of 'simplify()'.
     int64_t             simpDB_props;     // Remaining number of propagations that must be made before next execution of 'simplify()'.
     vec<Lit>            assumptions;      // Current set of assumptions provided to solve by the user.
@@ -326,10 +333,6 @@ inline int      Solver::nAssigns      ()      const   { return trail.size(); }
 inline int      Solver::nClauses      ()      const   { return clauses.size(); }
 inline int      Solver::nLearnts      ()      const   { return learnts.size(); }
 inline int      Solver::nVars         ()      const   { return vardata.size(); }
-inline void*    Solver::trail         ()      const   { return trail; }
-inline int*     Solver::trail_lim     ()      const   { return trail_lim; }
-inline void*    Solver::vardata       ()      const   { return vardata; }
-inline int      Solver::qhead         ()      const   { return qhead; }
 inline int      Solver::nFreeVars     ()      const   { return (int)dec_vars - (trail_lim.size() == 0 ? trail.size() : trail_lim[0]); }
 inline void     Solver::setPolarity   (Var v, bool b) { polarity[v] = b; }
 inline void     Solver::setDecisionVar(Var v, bool b) 

@@ -491,11 +491,20 @@ static VALUE solver_trail(VALUE rslv)
 
 static VALUE solver_trail_lim(VALUE rslv)
 {
+
     csolver *cslv;
 
     Data_Get_Struct(rslv, csolver, cslv);
 
-    return wrap_solver_trail_lim(cslv->solver);
+    intArray arr = wrap_solver_trail_lim(cslv->solver);
+
+    VALUE name = rb_ary_new2(arr.len);
+    int i;
+    for(i =0; i< arr.len; i++){
+        rb_ary_push(name,INT2NUM(arr.array[i]));
+    }
+
+    return name;
 }
 
 static VALUE solver_vardata(VALUE rslv)
@@ -510,10 +519,11 @@ static VALUE solver_vardata(VALUE rslv)
 static VALUE solver_qhead(VALUE rslv)
 {
     csolver *cslv;
+    VALUE val;
 
     Data_Get_Struct(rslv, csolver, cslv);
 
-    return wrap_solver_qhead(cslv->solver);
+    return INT2FIX((wrap_solver_qhead(cslv->solver)));
 }
 
 
@@ -537,7 +547,7 @@ void Init_minisat()
     rb_define_method(rb_cSolver, "satisfied?", solver_satisfied_p, 0);
     rb_define_method(rb_cSolver, "trail", solver_trail, 0);
     rb_define_method(rb_cSolver, "trail_lim", solver_trail_lim, 0);
-    rb_define_method(rb_cSolver, "vardata", solver_varadata, 0);
+    rb_define_method(rb_cSolver, "vardata", solver_vardata, 0);
     rb_define_method(rb_cSolver, "qhead", solver_qhead, 0);
 
     rb_cVariable = rb_define_class_under(rb_mMiniSat, "Variable", rb_cObject);
