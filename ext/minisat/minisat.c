@@ -486,7 +486,7 @@ static VALUE solver_trail(VALUE rslv)
 
     Data_Get_Struct(rslv, csolver, cslv);
 
-    return wrap_solver_trail(cslv->solver);
+    return INT2FIX(wrap_solver_trail(cslv->solver));
 }
 
 static VALUE solver_trail_lim(VALUE rslv)
@@ -496,12 +496,14 @@ static VALUE solver_trail_lim(VALUE rslv)
 
     Data_Get_Struct(rslv, csolver, cslv);
 
-    intArray arr = wrap_solver_trail_lim(cslv->solver);
+    int size =wrap_solver_trail_lim_size(cslv->solver);
+    int value;
 
-    VALUE name = rb_ary_new2(arr.len);
+    VALUE name = rb_ary_new2(size);
     int i;
-    for(i =0; i< arr.len; i++){
-        rb_ary_push(name,INT2NUM(arr.array[i]));
+    for(i =0; i< size; i++){
+        value = wrap_solver_trail_lim(cslv->solver,i);
+        rb_ary_push(name,INT2NUM(value));
     }
 
     return name;
@@ -513,7 +515,7 @@ static VALUE solver_vardata(VALUE rslv)
 
     Data_Get_Struct(rslv, csolver, cslv);
 
-    return wrap_solver_vardata(cslv->solver);
+    return INT2FIX(wrap_solver_vardata_size(cslv->solver));
 }
 
 static VALUE solver_qhead(VALUE rslv)

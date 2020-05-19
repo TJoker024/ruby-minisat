@@ -31,11 +31,23 @@ THE SOFTWARE.
 
 #ifdef HAVE_MINISAT_CORE_SOLVER_H
 #include "minisat/core/Solver.h"
+#include "minisat/core/SolverTypes.h"
+#include "minisat/mtl/Alloc.h"
+#include "minisat/mtl/IntTypes.h"
+#include "minisat/mtl/Alg.h"
+#include "minisat/mtl/Vec.h"
+#include "minisat/mtl/Map.h"
 #else
 #include "core/Solver.h"
+#include "core/SolverTypes.h"
+#include "mtl/Alloc.h"
+#include "mtl/IntTypes.h"
+#include "mtl/Alg.h"
+#include "mtl/Vec.h"
+#include "mtl/Map.h"
 #endif
 #include "minisat.h"
-#include <vector>
+#include <iostream>
 using namespace Minisat;
 
 
@@ -95,21 +107,32 @@ extern "C" int wrap_solver_clause_size(wrap_solver slv) {
     return ((Solver*) slv)->nClauses();
 }
 
-extern "C" void* wrap_solver_trail(wrap_solver slv) {
-    return &(((Solver*) slv)->trail)[0];
+extern "C" int wrap_solver_trail(wrap_solver slv) {
+    return (((Solver*) slv)->trail).size();
 }
 
-extern "C" intArray wrap_solver_trail_lim(wrap_solver slv) {
-
-    //struct intArray arr = {(((Solver*) slv)->trail_lim).size(), (((Solver*) slv)->trail_lim).get_data()};
-    int arrayt[]= {-1, 2, 12345};
-    struct intArray arr = {.len= 3, .array= &arrayt[0]};
-    return arr;
+extern "C" int wrap_solver_trail_lim(wrap_solver slv,int index) {
+    return (((Solver*) slv)->trail_lim)[index];
+}
+extern "C" int wrap_solver_trail_lim_size(wrap_solver slv) {
+    return (((Solver*) slv)->trail_lim).size();
 }
 
-extern "C" void* wrap_solver_vardata(wrap_solver slv) {
-
-    return &(((Solver*) slv)->vardata)[0];
+extern "C" int wrap_solver_vardata_size(wrap_solver slv) {
+    return (((Solver*) slv)->vardata).size();
+}
+extern "C" uint32_t wrap_solver_vardata_elem_size(wrap_solver slv,int index) {
+    return (((Solver*) slv)->vardata)[index].reason;
+}
+extern "C" uint32_t wrap_solver_vardata_elem_wasted(wrap_solver slv,int index) {
+    return (((Solver*) slv)->vardata)[index].reason;
+}
+extern "C" int wrap_solver_vardata_elem_level(wrap_solver slv,int index) {
+    return (((Solver*) slv)->vardata)[index].level;
+}
+extern "C" uint32_t wrap_solver_vardata_elem_index(wrap_solver slv,int index, int ind) {
+    CRef reason = (((Solver*) slv)->vardata)[index].reason;
+    return reason;
 }
 
 extern "C" int wrap_solver_qhead(wrap_solver slv) {

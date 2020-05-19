@@ -23,6 +23,8 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 #include <assert.h>
 #include <new>
+#include <iostream>
+
 
 #include "mtl/IntTypes.h"
 #include "mtl/XAlloc.h"
@@ -58,10 +60,9 @@ public:
 
     // Pointer to first element:
     operator T*       (void)           { return data; }
-    T* get_data       (void)           { return data; }
 
     // Size operations:
-    int      size     (void) const     { return sz; }
+    int      size     (void) const     { std::cout << sz; std::cout << "\n"; return sz; }
     void     shrink   (int nelems)     { assert(nelems <= sz); for (int i = 0; i < nelems; i++) sz--, data[sz].~T(); }
     void     shrink_  (int nelems)     { assert(nelems <= sz); sz -= nelems; }
     int      capacity (void) const     { return cap; }
